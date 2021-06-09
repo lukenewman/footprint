@@ -1,0 +1,1 @@
+{"id":"aa42f0c5-6a58-422a-a0a6-f576d628c59d","space":5399,"runtime":"python3.7","name":"footprint-api","path":"lh2lo0","project":"b0ybjrnu","account":"144798365827","region":"us-east-1","deps":["FastAPI"],"envs":null,"public":true,"log_level":"debug","cron":""}
