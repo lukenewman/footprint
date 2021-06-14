@@ -7,63 +7,28 @@ const { Sider } = Layout;
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      categories: []
-    };
-
     this.menuItemClicked = this.menuItemClicked.bind(this);
   }
 
-  componentDidMount() {
-    fetch("https://lh2lo0.deta.dev/categories")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            categories: result.categories
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-  }
-
-  menuItemClicked({ item, key, keyPath, domEvent }) {
-    const { categories } = this.state;
-    console.log("category " + categories[key] + " clicked");
+  menuItemClicked({ key }) {
+    this.props.onCategoryClicked(this.props.categories[key]);
   }
 
   render() {
-    const { error, isLoaded, categories } = this.state;
-
-    let content;
-    if (error) {
-      content = <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      content = <div>Loading...</div>;
-    } else {
-      content = (
+    return (
+      <Sider width={'20%'}>
         <Menu
           mode="inline"
           defaultSelectedKeys={['0']}
           style={{ height: '100%', borderRight: 0 }}
           onClick={this.menuItemClicked}
         >
-          {categories.map((category, index) => (
-            <Menu.Item key={index}>{category}</Menu.Item>
+          {this.props.categories.map((category, index) => (
+            <Menu.Item key={index}>{category.name}</Menu.Item>
           ))}
         </Menu>
-      );
-    }
-
-    return <Sider width={'20%'}>{content}</Sider>;
+      </Sider>
+    );
   }
 }
 
