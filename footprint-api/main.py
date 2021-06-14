@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -25,11 +25,11 @@ class Category(BaseModel):
 categories = [ 
   Category(id=0, name="Housing", emission_types=[
     EmissionType(id=0, name="Electricity", emissions_factor=2),
-    EmissionType(id=1, name="Natural Gas", emissions_factor=2),
-    EmissionType(id=2, name="Fuel Oil", emissions_factor=2),
-    EmissionType(id=3, name="LPG", emissions_factor=2),
-    EmissionType(id=4, name="Waste", emissions_factor=2),
-    EmissionType(id=5, name="Water", emissions_factor=2),
+    EmissionType(id=1, name="Natural Gas", emissions_factor=3),
+    EmissionType(id=2, name="Fuel Oil", emissions_factor=4),
+    EmissionType(id=3, name="LPG", emissions_factor=5),
+    EmissionType(id=4, name="Waste", emissions_factor=6),
+    EmissionType(id=5, name="Water", emissions_factor=7),
   ]),
   Category(id=1, name="Travel", emission_types=[
     EmissionType(id=6, name="Vehicle", emissions_factor=2),
@@ -85,6 +85,6 @@ def get_emission_type(id: int):
   return next(x for x in flattened_emission_types if x.id == id)
 
 @app.get("/calculate/{emission_type_id}")
-def calculate_emission(emission_type_id: int):
+def calculate_emission(emission_type_id: int, value: int = 1):
   emission_type = next(x for x in flattened_emission_types if x.id == emission_type_id)
-  return { "emissions": emission_type.emissions_factor }
+  return { "emissions": emission_type.emissions_factor * value }
