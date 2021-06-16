@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Sidebar /> matches snapshot 1`] = `
+<aside
+  className="ant-layout-sider ant-layout-sider-dark"
+  style={
+    Object {
+      "flex": "0 0 20%",
+      "maxWidth": "20%",
+      "minWidth": "20%",
+      "width": "20%",
+    }
+  }
+>
+  <div
+    className="ant-layout-sider-children"
+  >
+    <ul
+      className="ant-menu ant-menu-root ant-menu-inline ant-menu-light"
+      data-menu-list={true}
+      onKeyDown={[Function]}
+      role="menu"
+      style={
+        Object {
+          "borderRight": 0,
+          "height": "100%",
+        }
+      }
+      tabIndex={0}
+    >
+      <li
+        className="ant-menu-item ant-menu-item-selected ant-menu-item-only-child"
+        data-menu-id={null}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        role="menuitem"
+        style={
+          Object {
+            "paddingLeft": 24,
+          }
+        }
+        tabIndex={-1}
+      >
+        <span
+          className="ant-menu-title-content"
+        >
+          Housing
+        </span>
+      </li>
+      <li
+        className="ant-menu-item ant-menu-item-only-child"
+        data-menu-id={null}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        role="menuitem"
+        style={
+          Object {
+            "paddingLeft": 24,
+          }
+        }
+        tabIndex={-1}
+      >
+        <span
+          className="ant-menu-title-content"
+        >
+          Travel
+        </span>
+      </li>
+      <li
+        className="ant-menu-item ant-menu-item-only-child"
+        data-menu-id={null}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        role="menuitem"
+        style={
+          Object {
+            "paddingLeft": 24,
+          }
+        }
+        tabIndex={-1}
+      >
+        <span
+          className="ant-menu-title-content"
+        >
+          Other
+        </span>
+      </li>
+    </ul>
+    <div
+      aria-hidden={true}
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    />
+  </div>
+</aside>
+`;

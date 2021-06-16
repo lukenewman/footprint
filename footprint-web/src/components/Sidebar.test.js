@@ -1,30 +1,25 @@
 import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import renderer from 'react-test-renderer';
+import Sidebar from "./Sidebar.js";
 
-import SideBar from "./Sidebar.js";
+test("<Sidebar /> matches snapshot", () => {
+  let categories = [
+    {
+      id: 0,
+      name: "Housing"
+    },
+    {
+      id: 1,
+      name: "Travel"
+    },
+    {
+      id: 3,
+      name: "Other"
+    },
+  ];
 
-let container = null;
-beforeEach(() => {
-  container = document.createElement("div");
-  document.body.appendChild(container);
+  const component = renderer.create(
+    <Sidebar categories={categories} />
+  );
+  expect(component.toJSON()).toMatchSnapshot();
 });
-
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
-
-// it("renders emission type name and units", () => {
-//   let emissionType = {
-//     name: "Natural Gas",
-//     units: "therms/year"
-//   };
-
-//   act(() => {
-//     render(<EmissionRow emissionType={emissionType} />, container);
-//   });
-//   expect(container.textContent).toBe(emissionType.name);
-//   expect(container.textContent).toBe(emissionType.units);
-// });
