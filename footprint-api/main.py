@@ -16,6 +16,7 @@ class EmissionType(BaseModel):
   id: int
   name: str
   emissions_factor: float
+  units: str
 
 class Category(BaseModel):
   id: int
@@ -24,48 +25,46 @@ class Category(BaseModel):
 
 categories = [ 
   Category(id=0, name="Housing", emission_types=[
-    EmissionType(id=0, name="Electricity", emissions_factor=2),
-    EmissionType(id=1, name="Natural Gas", emissions_factor=3),
-    EmissionType(id=2, name="Fuel Oil", emissions_factor=4),
-    EmissionType(id=3, name="LPG", emissions_factor=5),
-    EmissionType(id=4, name="Waste", emissions_factor=6),
-    EmissionType(id=5, name="Water", emissions_factor=7),
+    EmissionType(id=0, name="Electricity", emissions_factor=0.92, units="kWh/year"),
+    EmissionType(id=1, name="Natural Gas", emissions_factor=117.0, units="therms/year"),
+    EmissionType(id=4, name="Waste", emissions_factor=6, units="lbs/year"),
+    EmissionType(id=5, name="Water", emissions_factor=7, units="gal/year"),
   ]),
   Category(id=1, name="Travel", emission_types=[
-    EmissionType(id=6, name="Vehicle", emissions_factor=2),
-    EmissionType(id=7, name="Bus", emissions_factor=2),
-    EmissionType(id=8, name="Metro", emissions_factor=2),
-    EmissionType(id=9, name="Taxi", emissions_factor=2),
-    EmissionType(id=10, name="Rail", emissions_factor=2),
-    EmissionType(id=11, name="Flying", emissions_factor=2),
+    EmissionType(id=6, name="Vehicle", emissions_factor=2, units="miles/year"),
+    EmissionType(id=7, name="Bus", emissions_factor=2, units="miles/year"),
+    EmissionType(id=8, name="Metro", emissions_factor=2, units="miles/year"),
+    EmissionType(id=9, name="Taxi", emissions_factor=2, units="miles/year"),
+    EmissionType(id=10, name="Rail", emissions_factor=2, units="miles/year"),
+    EmissionType(id=11, name="Flying", emissions_factor=2, units="miles/year"),
   ]),
   Category(id=2, name="Food", emission_types=[
-    EmissionType(id=12, name="Red meat", emissions_factor=2),
-    EmissionType(id=13, name="White meat", emissions_factor=2),
-    EmissionType(id=14, name="Dairy", emissions_factor=2),
-    EmissionType(id=15, name="Cereals", emissions_factor=2),
-    EmissionType(id=16, name="Vegetables", emissions_factor=2),
-    EmissionType(id=17, name="Fruits", emissions_factor=2),
-    EmissionType(id=18, name="Oils", emissions_factor=2),
-    EmissionType(id=19, name="Snacks", emissions_factor=2),
-    EmissionType(id=20, name="Drinks", emissions_factor=2),
+    EmissionType(id=12, name="Red meat", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=13, name="White meat", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=14, name="Dairy", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=15, name="Cereals", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=16, name="Vegetables", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=17, name="Fruits", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=18, name="Oils", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=19, name="Snacks", emissions_factor=2, units="lbs/year"),
+    EmissionType(id=20, name="Drinks", emissions_factor=2, units="lbs/year"),
   ]),
   Category(id=3, name="Products", emission_types=[
-    EmissionType(id=21, name="Electrical", emissions_factor=2),
-    EmissionType(id=22, name="Household", emissions_factor=2),
-    EmissionType(id=23, name="Clothes", emissions_factor=2),
-    EmissionType(id=24, name="Medical", emissions_factor=2),
-    EmissionType(id=25, name="Recreational", emissions_factor=2),
-    EmissionType(id=26, name="Other", emissions_factor=2),
+    EmissionType(id=21, name="Electrical", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=22, name="Household", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=23, name="Clothes", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=24, name="Medical", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=25, name="Recreational", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=26, name="Other", emissions_factor=2, units="dollars/year"),
   ]),
   Category(id=4, name="Services", emission_types=[
-    EmissionType(id=27, name="Health", emissions_factor=2),
-    EmissionType(id=28, name="Finance", emissions_factor=2),
-    EmissionType(id=29, name="Recreation", emissions_factor=2),
-    EmissionType(id=30, name="Education", emissions_factor=2),
-    EmissionType(id=31, name="Vehicle", emissions_factor=2),
-    EmissionType(id=32, name="Communications", emissions_factor=2),
-    EmissionType(id=33, name="Other", emissions_factor=2),
+    EmissionType(id=27, name="Health", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=28, name="Finance", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=29, name="Recreation", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=30, name="Education", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=31, name="Vehicle", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=32, name="Communications", emissions_factor=2, units="dollars/year"),
+    EmissionType(id=33, name="Other", emissions_factor=2, units="dollars/year"),
   ]),
 ]
 
@@ -79,10 +78,6 @@ def get_root():
 @app.get("/categories")
 def get_categories():
   return { "categories": categories }
-
-@app.get("/emission_types/{id}")
-def get_emission_type(id: int):
-  return next(x for x in flattened_emission_types if x.id == id)
 
 @app.get("/calculate/{emission_type_id}")
 def calculate_emission(emission_type_id: int, value: int = 1):
