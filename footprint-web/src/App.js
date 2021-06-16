@@ -55,8 +55,8 @@ class App extends React.Component {
     Known issue: if a user enters a longer number (3-4 digits), the API
       calls may return at different times and overwrite others. Potential
       fix could be cancelling in-flight calculation requests when
-      the value for the same emissionTypeID is updated before the request
-      returns.
+      the value for the same emissionTypeID is updated before the prior
+      request returns.
   */
   onInputChanged = (value, emissionTypeID) => {
     let { emissionEntries, emissionResults } = this.state;
