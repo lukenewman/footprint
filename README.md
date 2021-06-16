@@ -19,3 +19,8 @@ The web application is written with React and uses Ant Design components.
 The basic layout contains emission categories on the left side and the selected category's emission types in the main content window. Entering values in each emission type's input field will automatically update the total emissions displayed at the bottom of the page (see note in `App.js` for a known issue with this feature).
 
 As mentioned above, the web app's content is driven by the API.
+
+There are some simple snapshot tests for all the components. Testing coverage could be expanded to more e2e-type tests like: 
+
+1. inputting values and asserting that the correct changes to the "Totel Emissions" footer are performed
+2. selecting a category and asserting that the newly-selected category's emission types are displayed in the content pane
