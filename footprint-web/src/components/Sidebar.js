@@ -4,13 +4,16 @@ import 'antd/dist/antd.css';
 
 const { Sider } = Layout;
 
-class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.menuItemClicked = this.menuItemClicked.bind(this);
-  }
+/* 
+  The main navigational component of the app. Clicking on a category
+    will switch the app's content to show the selected category's emission types
 
-  menuItemClicked({ key }) {
+  Props:
+    categories ([Category]): dynamically supplied by the API
+    onCategoryClicked ((category) => ()): callback for navigational purposes
+*/
+class Sidebar extends React.Component {
+  menuItemClicked = ({ key }) => {
     this.props.onCategoryClicked(this.props.categories[key]);
   }
 

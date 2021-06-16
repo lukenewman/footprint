@@ -1,7 +1,8 @@
-import { Layout, Typography, InputNumber, Row, Col } from 'antd';
+import { Layout, Typography } from 'antd';
 import React from 'react';
 import './App.css';
 import Sidebar from './components/Sidebar';
+import EmissionRow from './components/EmissionRow';
 
 const { Title } = Typography;
 const { Header, Content, Footer } = Layout;
@@ -13,12 +14,13 @@ class App extends React.Component {
       error: null,
       isLoaded: false,
       categories: [],
-      selectedCategory: null
+      selectedCategory: null,
+      emissionEntries: {}, // { EmissionType.id: value entered into InputNumber }
+      emissionResults: {}  // { EmissionType.id: emissions calculated from API }
     };
-
-    this.navigateToCategory = this.navigateToCategory.bind(this);
   }
 
+  // Load the categories and emission types from the API
   componentDidMount() {
     fetch("https://lh2lo0.deta.dev/categories")
       .then(res => res.json())
@@ -36,17 +38,66 @@ class App extends React.Component {
             error
           });
         }
-      )
+      );
   }
 
-  navigateToCategory(category) {
+  // Callback used by Sidebar to navigate between categories
+  navigateToCategory = (category) => {
     this.setState({
       selectedCategory: category
     });
   }
 
+  /* 
+    Callback used by EmissionRow to capture user input and call the API
+      to calculate the emissions.
+
+    Known issue: if a user enters a longer number (3-4 digits), the API
+      calls may return at different times and overwrite others. Potential
+      fix could be cancelling in-flight calculation requests when
+      the value for the same emissionTypeID is updated before the request
+      returns.
+  */
+  onInputChanged = (value, emissionTypeID) => {
+    let { emissionEntries, emissionResults } = this.state;
+    if (value === null) {
+      delete emissionEntries[emissionTypeID];
+      delete emissionResults[emissionTypeID];
+      this.setState({
+        emissionEntries: emissionEntries,
+        emissionResults: emissionResults
+      });
+    } else {
+      emissionEntries[emissionTypeID] = value;
+      fetch(`https://lh2lo0.deta.dev/calculate/${emissionTypeID}?value=${value}`)
+        .then(res => res.json())
+        .then(
+          (result) => {
+            emissionResults[emissionTypeID] = result.emissions;
+            this.setState({
+              emissionEntries: emissionEntries,
+              emissionResults: emissionResults
+            });
+          },
+          (error) => {
+            console.log('error calculating emissions', error);
+          }
+        );
+    }
+  }
+
+  // Used by the footer to display total emissions based on the user's input
+  calculateTotalEmissions = () => {
+    let { emissionResults } = this.state;
+    let sum = 0;
+    for (let key in emissionResults) {
+      sum += emissionResults[key];
+    }
+    return sum;
+  }
+
   render() {
-    const { error, isLoaded, categories, selectedCategory } = this.state;
+    const { error, isLoaded, categories, selectedCategory, emissionEntries } = this.state;
 
     let content;
     if (error) {
@@ -55,11 +106,11 @@ class App extends React.Component {
       content = <div>Loading...</div>;
     } else {
       content = (
-        <Layout>
+        <Layout style={{height: '100%'}}>
           <Header className="App-header">
             <Title level={2}>footprint</Title>
           </Header>
-          <Layout height='100%'>
+          <Layout>
             <Sidebar 
               categories={categories}
               onCategoryClicked={this.navigateToCategory}
@@ -69,27 +120,24 @@ class App extends React.Component {
                 style={{
                   padding: 24,
                   margin: 0,
-                  minHeight: 280
+                  minHeight: '100%'
                 }}
               >
                 <Title level={3} style={{padding: 24}}>{selectedCategory.name}</Title>
-                {selectedCategory.emission_types.map((emission_type, index) => (
-                  <div key={index}>
-                    <Row>
-                      <Col span={6} offset={4}>
-                        <Title level={4}>{emission_type.name}</Title>
-                      </Col>
-                      <Col span={6}>
-                        <InputNumber defaultValue={0}></InputNumber>
-                        kgCO2/y
-                      </Col>
-                    </Row>
-                  </div>
+                {selectedCategory.emission_types.map((emission_type) => (
+                  <EmissionRow 
+                    key={emission_type.id}
+                    emissionType={emission_type}
+                    existingInput={emissionEntries[emission_type.id]}
+                    onInputChanged={this.onInputChanged}
+                  />
                 ))}
               </Content>
             </Layout>
           </Layout>
-          <Footer>footer</Footer>
+          <Footer style={{ backgroundColor: '#fff' }}>
+            <Title level={2}>Total Emissions: {this.calculateTotalEmissions().toLocaleString()} kgCO₂ / year</Title>
+          </Footer>
         </Layout>
       );
     }
