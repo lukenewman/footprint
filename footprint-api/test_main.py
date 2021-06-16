@@ -17,3 +17,4 @@ def test_calculate_emission():
   response = tester.get("/calculate/4?value=100")
   assert response.status_code == 200
   assert response.json() == { "emissions": main.categories[0].emission_types[2].emissions_factor * 100}
+  
