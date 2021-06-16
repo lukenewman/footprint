@@ -16,6 +16,12 @@ Some simple tests are included via `pytest`.
 
 The web application is written with React and uses Ant Design components.
 
+To run:
+
+1. Clone the repository and `cd` into the directory
+2. Run `yarn install`
+3. Run `yarn start`
+
 The basic layout contains emission categories on the left side and the selected category's emission types in the main content window. Entering values in each emission type's input field will automatically update the total emissions displayed at the bottom of the page (see note in `App.js` for a known issue with this feature).
 
 As mentioned above, the web app's content is driven by the API.
